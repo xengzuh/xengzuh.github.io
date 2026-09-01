@@ -1,0 +1,1182 @@
+/* =========================================================
+   Jason Heng — portfolio
+   Two themes driven by [data-theme] on <html>, set before
+   first paint by the inline script in index.html.
+   ========================================================= */
+
+/* ---------- tokens: light (default) ---------- */
+:root {
+  --bg: #f5f2ea;
+  --bg-2: #fbf9f4;
+  --surface: #ffffff;
+  --line: #e2dbcb;
+  --line-2: #c7bfa9;
+  --text: #17170f;
+  --text-dim: #5e5b50;
+  --accent: #6f9200;
+  --accent-fill: #c8f542;
+  --on-accent: #14180a;
+  --sun: #f2a51c;
+  --sky-1: #d9e8f6;
+  --sky-2: #f8f0de;
+  --rug: #ece3d1;
+  --shadow: 0 20px 45px -30px rgba(20, 20, 15, .55);
+  --grain: .035;
+
+  /* character */
+  --skin: #f3cba4;
+  --skin-2: #e2b58a;
+  --hair: #16110f;
+  --shirt: #f0a3c4;
+  --shirt-2: #d9789f;
+  --pants: #3d4557;
+  --pants-2: #333a4a;
+  --shoe: #23252c;
+  --laptop: #2c2d33;
+  --laptop-2: #4a4c56;
+
+  --mono: 'Space Mono', ui-monospace, monospace;
+  --display: 'Bebas Neue', Impact, sans-serif;
+  --body: 'DM Sans', system-ui, -apple-system, sans-serif;
+
+  --maxw: 1140px;
+  --ease: cubic-bezier(.2, .8, .3, 1);
+}
+
+/* ---------- tokens: dark ---------- */
+[data-theme="dark"] {
+  --bg: #0b0b0d;
+  --bg-2: #101014;
+  --surface: #141419;
+  --line: #24242b;
+  --line-2: #3b3b46;
+  --text: #eceae4;
+  --text-dim: #8d8b85;
+  --accent: #c8f542;
+  --accent-fill: #c8f542;
+  --on-accent: #0b0b0d;
+  --sun: #e9e6d8;
+  --sky-1: #141b30;
+  --sky-2: #0b0b12;
+  --rug: #16161d;
+  --shadow: 0 20px 45px -28px rgba(0, 0, 0, .9);
+  --grain: .05;
+
+  --skin: #e9c19b;
+  --skin-2: #d0a077;
+  --shirt: #e492b6;
+  --shirt-2: #c76a92;
+  --pants: #394152;
+  --pants-2: #2e3543;
+  --laptop: #26272c;
+  --laptop-2: #43454e;
+}
+
+/* ---------- reset ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 100px;
+}
+
+body {
+  position: relative;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--body);
+  font-weight: 300;
+  line-height: 1.65;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color .45s var(--ease), color .45s var(--ease);
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+.mono {
+  font-family: var(--mono);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  z-index: 999;
+  background: var(--accent-fill);
+  color: var(--on-accent);
+  padding: .7rem 1.2rem;
+  font-family: var(--mono);
+  font-size: .8rem;
+}
+
+.skip-link:focus {
+  left: .5rem;
+  top: .5rem;
+}
+
+/* subtle paper grain */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 900;
+  opacity: var(--grain);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* =========================================================
+   NAV
+   ========================================================= */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: .85rem clamp(1rem, 4vw, 2.5rem);
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(14px);
+  transition: background-color .45s var(--ease), border-color .45s var(--ease);
+}
+
+.nav-logo {
+  font-family: var(--mono);
+  font-size: .82rem;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-decoration: none;
+  color: var(--text);
+}
+
+.nav-logo span {
+  color: var(--accent);
+}
+
+.nav-links {
+  display: flex;
+  gap: clamp(.7rem, 2vw, 1.6rem);
+}
+
+.nav-links a {
+  font-family: var(--mono);
+  font-size: .74rem;
+  letter-spacing: .06em;
+  color: var(--text-dim);
+  text-decoration: none;
+  padding: .3rem 0;
+  border-bottom: 1px solid transparent;
+  transition: color .2s, border-color .2s;
+}
+
+.nav-links a:hover {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+
+/* ---------- sun / moon toggle ---------- */
+.theme-toggle {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--bg-2);
+  transition: border-color .3s, background-color .3s, transform .3s var(--ease);
+}
+
+.theme-toggle:hover {
+  border-color: var(--line-2);
+  transform: rotate(18deg);
+}
+
+.celestial {
+  width: 30px;
+  height: 30px;
+  overflow: visible;
+  transition: transform .6s var(--ease);
+}
+
+.celestial .disc {
+  fill: var(--sun);
+  transition: fill .45s var(--ease);
+}
+
+.celestial .rays {
+  transform-box: view-box;
+  transform-origin: 22px 22px;
+  transition: transform .55s var(--ease), opacity .35s ease;
+}
+
+.celestial .rays line {
+  stroke: var(--sun);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  transition: stroke .45s var(--ease);
+}
+
+.celestial .bite {
+  transform-box: view-box;
+  transform-origin: 22px 22px;
+  transform: translate(21px, -21px);
+  transition: transform .5s var(--ease);
+}
+
+[data-theme="dark"] .celestial {
+  transform: rotate(-28deg);
+}
+
+[data-theme="dark"] .celestial .rays {
+  opacity: 0;
+  transform: scale(.35) rotate(50deg);
+}
+
+[data-theme="dark"] .celestial .bite {
+  transform: translate(7.5px, -6.5px);
+}
+
+/* =========================================================
+   HERO
+   ========================================================= */
+.hero {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: clamp(6.5rem, 14vh, 9rem) clamp(1.2rem, 4vw, 2.5rem) clamp(2rem, 6vh, 4rem);
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr);
+  gap: clamp(2rem, 5vw, 4.5rem);
+  align-items: center;
+  min-height: 100svh;
+}
+
+/* ---------- portrait ---------- */
+.portrait {
+  justify-self: end;
+  width: 100%;
+  max-width: 330px;
+  cursor: grab;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  will-change: transform;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.portrait.is-held {
+  cursor: grabbing;
+}
+
+.portrait:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+}
+
+.portrait img {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: center 22%;
+  /* full colour in light mode, black and white in dark - see below */
+  filter: none;
+  transition: filter .45s var(--ease);
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+[data-theme="dark"] .portrait img {
+  filter: grayscale(1) contrast(1.06);
+}
+
+.hero-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(4.2rem, 12vw, 9rem);
+  line-height: .86;
+  letter-spacing: .005em;
+  margin-bottom: 1.2rem;
+}
+
+.hero-title .l1,
+.hero-title .l2 {
+  display: block;
+}
+
+.hero-title .l2 {
+  color: var(--accent);
+}
+
+@supports (-webkit-text-stroke: 2px currentColor) {
+  .hero-title .l2 {
+    color: transparent;
+    -webkit-text-stroke: 2px var(--accent);
+  }
+}
+
+.hero-lede {
+  font-size: clamp(1rem, 1.5vw, 1.12rem);
+  max-width: 44ch;
+  color: var(--text);
+}
+
+.hero-lede-2 {
+  color: var(--text-dim);
+  margin-top: .7rem;
+  font-size: 1rem;
+}
+
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .7rem;
+  margin-top: 1.9rem;
+}
+
+.btn {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: .78rem;
+  letter-spacing: .04em;
+  text-decoration: none;
+  padding: .75rem 1.4rem;
+  border: 1px solid var(--line-2);
+  border-radius: 100px;
+  transition: background-color .25s, color .25s, border-color .25s, transform .25s var(--ease);
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--text);
+}
+
+.btn-primary {
+  background: var(--accent-fill);
+  color: var(--on-accent);
+  border-color: var(--accent-fill);
+  font-weight: 700;
+}
+
+.btn-primary:hover {
+  background: transparent;
+  color: var(--text);
+}
+
+/* =========================================================
+   THE SCENE (chair + guy)
+   ========================================================= */
+/* 10% wider and 20% taller than it was in the old hero, and centred now
+   that the playground is a section of its own. The viewBox grew by the
+   same factors, so he stays the same size on screen and simply gets more
+   room to be thrown around in. */
+.stage {
+  position: relative;
+  width: 100%;
+  max-width: 690px;
+  margin: 0 auto;
+}
+
+.stage-inner {
+  position: relative;
+}
+
+.scene {
+  width: 100%;
+  height: auto;
+  display: block;
+  /* a safety net: nothing, art or hit area, escapes the panel */
+  overflow: hidden;
+  touch-action: manipulation;
+}
+
+.scene .sky {
+  fill: var(--sky-1);
+  transition: fill .5s var(--ease);
+}
+
+.scene .stars circle {
+  fill: #fff;
+  opacity: 0;
+  transition: opacity .6s ease;
+}
+
+[data-theme="dark"] .scene .stars circle {
+  opacity: .55;
+  animation: twinkle 4s ease-in-out infinite;
+}
+
+.scene .stars circle:nth-child(2n) {
+  animation-delay: 1.1s;
+}
+
+.scene .stars circle:nth-child(3n) {
+  animation-delay: 2.3s;
+}
+
+@keyframes twinkle {
+
+  0%,
+  100% {
+    opacity: .6;
+  }
+
+  50% {
+    opacity: .18;
+  }
+}
+
+.scene .rug {
+  fill: var(--rug);
+  transition: fill .5s var(--ease);
+}
+
+.scene .floor {
+  stroke: var(--line-2);
+  stroke-width: 1.5;
+}
+
+/* props */
+.scene .leaf {
+  fill: var(--accent);
+  opacity: .75;
+}
+
+.scene .pot {
+  fill: var(--laptop-2);
+}
+
+.scene .book-a {
+  fill: var(--shirt-2);
+}
+
+.scene .book-b {
+  fill: var(--accent);
+  opacity: .8;
+}
+
+.scene .book-c {
+  fill: var(--laptop-2);
+}
+
+.scene .mug {
+  fill: var(--surface);
+  stroke: var(--line-2);
+  stroke-width: 1.6;
+}
+
+.scene .mug-handle {
+  fill: none;
+  stroke: var(--line-2);
+  stroke-width: 1.6;
+}
+
+.scene .steam path {
+  fill: none;
+  stroke: var(--text-dim);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  opacity: .5;
+  animation: steam 3s ease-in-out infinite;
+}
+
+.scene .steam path:last-child {
+  animation-delay: .8s;
+}
+
+@keyframes steam {
+
+  0%,
+  100% {
+    opacity: 0;
+    transform: translateY(2px);
+  }
+
+  40% {
+    opacity: .55;
+    transform: translateY(-2px);
+  }
+}
+
+/* chair */
+.chair-base path {
+  stroke: var(--laptop-2);
+  stroke-width: 7;
+  stroke-linecap: round;
+  fill: none;
+}
+
+.castor {
+  fill: var(--laptop);
+}
+
+.chair-post {
+  fill: var(--laptop-2);
+}
+
+.chair-seat,
+.chair-back {
+  fill: var(--laptop);
+}
+
+/* ---------- the guy ---------- */
+.guy {
+  cursor: pointer;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.guy {
+  cursor: grab;
+}
+
+.guy.is-dragging {
+  cursor: grabbing;
+}
+
+.guy-hit {
+  fill: transparent;
+  stroke: none;
+}
+
+/* an <g> outline is unreliable across browsers, so draw the ring ourselves */
+.guy:focus-visible {
+  outline: none;
+}
+
+.guy:focus-visible .guy-hit {
+  stroke: var(--accent);
+  stroke-width: 2;
+  stroke-dasharray: 7 5;
+  rx: 8;
+}
+
+.guy .limb {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.guy .limb.skin {
+  stroke: var(--skin);
+  stroke-width: 9;
+}
+
+.guy .limb.skin-dim {
+  stroke: var(--skin-2);
+  stroke-width: 9;
+}
+
+.guy .sleeve {
+  stroke: var(--shirt);
+  stroke-width: 14;
+}
+
+.guy .sleeve-back {
+  stroke: var(--shirt-2);
+  stroke-width: 14;
+}
+
+.guy .pants {
+  stroke: var(--pants);
+  stroke-width: 13;
+}
+
+.guy .pants-back {
+  stroke: var(--pants-2);
+  stroke-width: 13;
+}
+
+.guy .shoe {
+  stroke: var(--shoe);
+  stroke-width: 9;
+}
+
+.guy .shoe-back {
+  stroke: var(--shoe);
+  stroke-width: 9;
+  opacity: .75;
+}
+
+.guy .shirt {
+  fill: var(--shirt);
+}
+
+.guy .collar {
+  fill: none;
+  stroke: var(--shirt-2);
+  stroke-width: 2.4;
+  stroke-linejoin: round;
+}
+
+.guy .button {
+  fill: var(--shirt-2);
+}
+
+.guy .neck {
+  stroke: var(--skin-2);
+  stroke-width: 9;
+  stroke-linecap: round;
+}
+
+.guy ellipse.skin {
+  fill: var(--skin);
+  stroke: none;
+}
+
+.guy .nose {
+  fill: none;
+  stroke: var(--skin-2);
+  stroke-width: 2.2;
+  stroke-linecap: round;
+}
+
+.guy .ear {
+  fill: var(--skin-2);
+}
+
+.guy .hair {
+  fill: var(--hair);
+}
+
+.guy .glasses rect {
+  fill: rgba(255, 255, 255, .38);
+  stroke: #16110f;
+  stroke-width: 1.9;
+}
+
+.guy .glasses path {
+  stroke: #16110f;
+  stroke-width: 1.9;
+  fill: none;
+  stroke-linecap: round;
+}
+
+.guy .pupil {
+  fill: #16110f;
+}
+
+.guy .mouth {
+  fill: none;
+  stroke: #6b4a3a;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+.guy .dizzy {
+  stroke: #16110f;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  fill: none;
+}
+
+.guy .mouth-o {
+  fill: #6b4a3a;
+}
+
+/* ---------- desk + laptop ---------- */
+.desk-top {
+  fill: var(--laptop-2);
+}
+
+.desk-leg {
+  fill: var(--laptop);
+}
+
+.lt-base {
+  fill: var(--laptop-2);
+}
+
+.lt-back {
+  fill: var(--laptop);
+}
+
+.lt-dot {
+  fill: #e2483d;
+}
+
+.lt-keys path {
+  stroke: var(--accent);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  opacity: .55;
+  animation: keyFlicker .42s steps(2, end) infinite alternate;
+}
+
+@keyframes keyFlicker {
+  from {
+    opacity: .3;
+  }
+
+  to {
+    opacity: .85;
+  }
+}
+
+.guy .ouch path {
+  fill: var(--accent);
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+
+/* face swap */
+.guy .face-dizzy {
+  opacity: 0;
+}
+
+.guy.is-dizzy .face-awake {
+  opacity: 0;
+}
+
+.guy.is-dizzy .face-dizzy {
+  opacity: 1;
+}
+
+.guy .face-awake,
+.guy .face-dizzy {
+  transition: opacity .2s ease;
+}
+
+.guy.is-hurt .ouch path {
+  opacity: 1;
+  animation: ouchPop .9s ease-in-out infinite alternate;
+}
+
+@keyframes ouchPop {
+  from {
+    opacity: .35;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* ---- joints ----
+   Positions and angles are written as inline transforms by
+   assets/js/character.js; these two properties just make sure a
+   rotation happens around the joint itself and not the viewBox origin. */
+.guy .j {
+  transform-box: view-box;
+  transform-origin: 0 0;
+}
+
+/* ---------- draggable stickers ----------
+   A layer over the whole page that ignores the pointer; only the
+   stickers on it catch clicks, so nothing underneath is blocked.
+   Positioned by assets/js/toys.js. */
+.stickers {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.sticker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  line-height: 0;
+  pointer-events: auto;
+  cursor: grab;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+  will-change: transform;
+  filter: drop-shadow(0 8px 14px rgba(0, 0, 0, .22));
+  transition: filter .25s ease;
+}
+
+.sticker:hover {
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .3));
+}
+
+.sticker.is-held {
+  cursor: grabbing;
+  filter: drop-shadow(0 16px 26px rgba(0, 0, 0, .38));
+}
+
+.sticker:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+  border-radius: 8px;
+}
+
+.sticker svg {
+  display: block;
+  overflow: visible;
+}
+
+.sticker-ball svg {
+  width: 56px;
+  height: 56px;
+}
+
+.sticker-tball svg {
+  width: 38px;
+  height: 38px;
+}
+
+.sticker-racket svg {
+  width: 54px;
+  height: 92px;
+}
+
+.sticker-hoop svg {
+  width: 84px;
+  height: 94px;
+}
+
+/* basketball */
+.bball {
+  fill: #e07b39;
+}
+
+.bball-seam path {
+  fill: none;
+  stroke: #7a3d15;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+/* tennis ball */
+.tball {
+  fill: #cddc39;
+}
+
+.tball-seam path {
+  fill: none;
+  stroke: #fbfbf5;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+}
+
+/* racket */
+.racket-head {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 3.2;
+}
+
+.racket-strings path {
+  fill: none;
+  stroke: var(--text-dim);
+  stroke-width: .9;
+  opacity: .8;
+}
+
+.racket-handle {
+  fill: none;
+  stroke: var(--text);
+  stroke-width: 4.4;
+  stroke-linecap: round;
+}
+
+.racket-grip {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+/* hoop */
+.board {
+  fill: var(--surface);
+  stroke: var(--line-2);
+  stroke-width: 2;
+}
+
+.board-inner {
+  fill: none;
+  stroke: var(--line-2);
+  stroke-width: 2;
+}
+
+.rim {
+  fill: none;
+  stroke: #e2483d;
+  stroke-width: 3.4;
+  stroke-linecap: round;
+}
+
+.net path {
+  fill: none;
+  stroke: var(--text-dim);
+  stroke-width: 1.1;
+  opacity: .7;
+}
+
+/* ---------- hint bubble ---------- */
+.hint {
+  position: absolute;
+  left: 50%;
+  top: 6%;
+  transform: translate(-50%, -6px);
+  z-index: 3;
+  font-family: var(--mono);
+  font-size: .72rem;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line-2);
+  border-radius: 100px;
+  padding: .38rem .9rem;
+  max-width: 72%;
+  text-align: center;
+  line-height: 1.5;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s ease, transform .35s var(--ease);
+}
+
+.hint.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  animation: bob 2.6s ease-in-out infinite;
+}
+
+@keyframes bob {
+
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+
+  50% {
+    transform: translate(-50%, -5px);
+  }
+}
+
+.stage-caption {
+  font-family: var(--mono);
+  font-size: .7rem;
+  color: var(--text-dim);
+  text-align: center;
+  margin-top: .6rem;
+  line-height: 1.8;
+}
+
+kbd {
+  font-family: var(--mono);
+  font-size: .68rem;
+  border: 1px solid var(--line-2);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  padding: .05rem .35rem;
+}
+
+/* =========================================================
+   SECTIONS
+   ========================================================= */
+.section {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: clamp(3.5rem, 9vw, 6.5rem) clamp(1.2rem, 4vw, 2.5rem);
+  border-top: 1px solid var(--line);
+}
+
+.section-head {
+  margin-bottom: clamp(1.8rem, 4vw, 3rem);
+}
+
+.section-num {
+  font-family: var(--mono);
+  font-size: .72rem;
+  color: var(--accent);
+  letter-spacing: .1em;
+}
+
+.section-head h2 {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(2.6rem, 6vw, 4.2rem);
+  line-height: 1;
+  letter-spacing: .01em;
+  margin: .25rem 0 .5rem;
+}
+
+.section-note {
+  color: var(--text-dim);
+  font-size: .95rem;
+  max-width: 52ch;
+}
+
+/* ---------- contact ---------- */
+.contact-links {
+  display: grid;
+  gap: .6rem;
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  text-decoration: none;
+  padding: 1.2rem 1.4rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--surface);
+  transition: border-color .25s, transform .25s var(--ease), background-color .25s;
+}
+
+.contact-link:hover {
+  border-color: var(--accent);
+  transform: translateX(6px);
+}
+
+.contact-kind {
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  width: 5.5rem;
+  flex: none;
+}
+
+.contact-val {
+  flex: 1;
+  font-size: 1rem;
+  word-break: break-word;
+}
+
+.contact-arrow {
+  color: var(--accent);
+}
+
+/* ---------- footer ---------- */
+.footer {
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 2rem clamp(1.2rem, 4vw, 2.5rem) 3rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  gap: .6rem;
+  justify-content: space-between;
+  font-size: .74rem;
+  color: var(--text-dim);
+}
+
+/* ---------- scroll reveal ---------- */
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .6s var(--ease), transform .6s var(--ease);
+}
+
+.reveal.in {
+  opacity: 1;
+  transform: none;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    padding-top: 6.5rem;
+  }
+
+  .portrait {
+    justify-self: center;
+    max-width: 260px;
+    order: -1;
+  }
+
+  .nav-links {
+    display: flex;
+  }
+}
+
+@media (max-width: 560px) {
+  .contact-link {
+    flex-wrap: wrap;
+    gap: .3rem 1rem;
+  }
+
+  .contact-kind {
+    width: auto;
+  }
+
+  .nav-links {
+    gap: .9rem;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION
+   respect the setting, but keep the site usable
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
