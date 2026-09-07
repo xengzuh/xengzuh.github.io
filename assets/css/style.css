@@ -324,9 +324,12 @@ body::after {
 .portrait img {
   width: 100%;
   height: auto;
-  aspect-ratio: 4 / 5;
+  /* matches me.jpg exactly (3:4), so nothing is cropped. object-fit/position
+     only come into play if a future photo has a different shape - then it
+     crops from the centre, biased upwards to protect the face. */
+  aspect-ratio: 3 / 4;
   object-fit: cover;
-  object-position: center 22%;
+  object-position: center 25%;
   /* full colour in light mode, black and white in dark - see below */
   filter: none;
   transition: filter .45s var(--ease);
